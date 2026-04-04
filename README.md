@@ -1,9 +1,9 @@
 <div align="center">
   <img src="https://cdn-icons-png.flaticon.com/512/2769/2769339.png" alt="Udant Logo" width="120" />
 
-  #  Udant Logistics OS
+  #  Udant Logistics OS - https://spam-bytes-delta.vercel.app/  
   **India's Agricultural First-Mile Logistics Operating System**
-  https://spam-bytes-delta.vercel.app/
+  
 
   *Purpose-Built for the DP World Hackathon*
 
@@ -57,6 +57,9 @@ Most "Agri-Tech" solutions are just glorified e-commerce websites connecting buy
 - **One Unified Matrix:** By connecting the *Producer*, the *Aggregator*, the *Auditor*, and the *Fleet* under a single deterministic operating system, Udant brings DP World's world-class supply chain standards directly to the dirt roads of rural India.
 
 ##  Quick-Start Deployment
+
+Deployed Link - https://spam-bytes-delta.vercel.app/
+
 Running the system locally takes less than 15 seconds.
 
 ```bash
