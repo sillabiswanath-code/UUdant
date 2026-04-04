@@ -1,119 +1,108 @@
 "use client";
 
-import { useState, useCallback } from 'react';
-import { GoogleMap, useJsApiLoader, Marker, Polyline, InfoWindow } from '@react-google-maps/api';
+import { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Polyline, Popup, useMap } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
 
-const containerStyle = {
-  width: '100%',
-  height: '100%',
-  minHeight: '500px'
-};
+// Fix for default Leaflet markers in Next.js
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+});
 
-const mapOptions = {
-    disableDefaultUI: true,
-    styles: [
-        { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
-        { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
-        { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
-        { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#d59563" }] },
-        { featureType: "road", elementType: "geometry", stylers: [{ color: "#38414e" }] },
-        { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#212a37" }] },
-        { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#9ca5b3" }] },
-        { featureType: "water", elementType: "geometry", stylers: [{ color: "#17263c" }] },
-        { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#515c6d" }] },
-        { featureType: "water", elementType: "labels.text.stroke", stylers: [{ color: "#17263c" }] }
-    ]
-};
+// Custom truck icon
+const truckIcon = new L.Icon({
+    iconUrl: 'https://cdn-icons-png.flaticon.com/512/2769/2769339.png',
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+    popupAnchor: [0, -16]
+});
+
+// Custom destination circle
+const destIcon = L.divIcon({
+    className: 'custom-div-icon',
+    html: "<div style='background-color:#10b981;width:14px;height:14px;border-radius:50%;border:2px solid white;box-shadow: 0 1px 4px rgba(0,0,0,0.3)'></div>",
+    iconSize: [14, 14],
+    iconAnchor: [7, 7]
+});
+
+// Component to handle map centering dynamically
+function MapController({ activeTruck, isolate }) {
+    const map = useMap();
+    useEffect(() => {
+        if (isolate && activeTruck) {
+            map.setView([activeTruck.current_location.lat, activeTruck.current_location.lng], 12);
+        } else {
+            map.setView([21.0, 78.0], 5);
+        }
+    }, [activeTruck, isolate, map]);
+    return null;
+}
 
 export default function LiveMap({ activeTruck, isolate, trucksData, onMarkerClick, onMarkerClose }) {
-  const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-  });
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
-  const [map, setMap] = useState(null);
-
-  const onLoad = useCallback(function callback(mapInstance) {
-    setMap(mapInstance);
-  }, []);
-
-  const onUnmount = useCallback(function callback(mapInstance) {
-    setMap(null);
-  }, []);
-
-  // Handle map centering based on isolate logic
-  if (map) {
-      if (isolate && activeTruck) {
-          map.panTo({ lat: activeTruck.current_location.lat, lng: activeTruck.current_location.lng });
-          map.setZoom(12);
-      } else {
-          map.panTo({ lat: 21.0, lng: 78.0 });
-          map.setZoom(5);
-      }
-  }
+  if (!mounted) return <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'100%', background:'#f8fafc', color:'#475569' }}>Loading High-Fidelity Logistics Map...</div>;
 
   const displayTrucks = isolate && activeTruck ? [activeTruck] : trucksData || [];
 
-  return isLoaded ? (
-    <GoogleMap
-      mapContainerStyle={containerStyle}
-      center={{ lat: 21.0, lng: 78.0 }}
-      zoom={5}
-      onLoad={onLoad}
-      onUnmount={onUnmount}
-      options={mapOptions}
+  return (
+    <MapContainer 
+      center={[21.0, 78.0]} 
+      zoom={5} 
+      style={{ height: '100%', width: '100%', minHeight: '500px', backgroundColor: '#f8fafc', zIndex: 0 }}
+      zoomControl={false}
     >
+      <MapController activeTruck={activeTruck} isolate={isolate} />
+      
+      {/* Light, Clean CartoDB Voyager Style (Perfect for Red/White OS) */}
+      <TileLayer
+        attribution='&copy; <a href="https://carto.com/">Carto</a>'
+        url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+      />
+
       {displayTrucks.map(truck => (
         <div key={truck.id}>
-            <Marker
-                position={{ lat: truck.current_location.lat, lng: truck.current_location.lng }}
-                icon={{
-                    url: 'https://cdn-icons-png.flaticon.com/512/2769/2769339.png',
-                    scaledSize: { width: 32, height: 32 }
-                }}
-                onClick={() => {
-                    if (onMarkerClick) onMarkerClick(truck);
-                }}
-            />
-            {isolate && activeTruck && activeTruck.id === truck.id && (
-                <InfoWindow
-                    position={{ lat: truck.current_location.lat, lng: truck.current_location.lng }}
-                    onCloseClick={() => {
-                        if (onMarkerClose) onMarkerClose();
-                    }}
-                >
-                    <div style={{ color: 'black', padding: '0.25rem' }}>
-                        <strong style={{ fontSize: '1rem' }}>{truck.id}</strong><br/>
-                        State: {truck.status.toUpperCase()}
-                    </div>
-                </InfoWindow>
-            )}
-            
-            <Polyline
-                path={[
-                    { lat: truck.current_location.lat, lng: truck.current_location.lng },
-                    { lat: truck.destination_location.lat, lng: truck.destination_location.lng }
-                ]}
-                options={{
-                    strokeColor: truck.status === 'transit' ? '#e11d48' : '#94a3b8',
-                    strokeOpacity: 0.8,
-                    strokeWeight: 3
-                }}
-            />
-            
             <Marker 
-                position={{ lat: truck.destination_location.lat, lng: truck.destination_location.lng }}
-                icon={{
-                    path: 'M 0,0 a 4,4 0 1,0 8,0 a 4,4 0 1,0 -8,0', // Vector circle
-                    fillColor: '#10b981',
-                    fillOpacity: 1,
-                    strokeColor: 'white',
-                    strokeWeight: 2,
-                    scale: 1.5
+                position={[truck.current_location.lat, truck.current_location.lng]} 
+                icon={truckIcon}
+                eventHandlers={{
+                    click: () => { if (onMarkerClick) onMarkerClick(truck) }
                 }}
+            >
+                {isolate && activeTruck && activeTruck.id === truck.id && (
+                    <Popup onClose={() => onMarkerClose && onMarkerClose()}>
+                        <div style={{ color: '#0f172a', padding: '0.25rem', minWidth: '120px' }}>
+                            <strong style={{ fontSize: '1rem' }}>{truck.id}</strong><br/>
+                            <div style={{ marginTop: '0.25rem', color: '#64748b' }}>State: <span style={{color: '#e11d48', fontWeight: 600}}>{truck.status.toUpperCase()}</span></div>
+                        </div>
+                    </Popup>
+                )}
+            </Marker>
+            
+            <Polyline 
+                positions={[
+                    [truck.current_location.lat, truck.current_location.lng],
+                    [truck.destination_location.lat, truck.destination_location.lng]
+                ]} 
+                pathOptions={{
+                    color: truck.status === 'transit' ? '#e11d48' : '#94a3b8',
+                    weight: 3,
+                    opacity: 0.8,
+                    dashArray: truck.status === 'transit' ? null : '5, 8'
+                }} 
+            />
+
+            <Marker 
+                position={[truck.destination_location.lat, truck.destination_location.lng]} 
+                icon={destIcon}
             />
         </div>
       ))}
-    </GoogleMap>
-  ) : <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'100%', background:'#1e293b', color:'white' }}>Authenticating Google API Key...</div>;
+    </MapContainer>
+  );
 }

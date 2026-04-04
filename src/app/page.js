@@ -31,7 +31,7 @@ export default function Home() {
   const t = (key) => key[lang] || key.eng;
 
   return (
-    <div style={{ display:'flex', minHeight:'100vh', background:'var(--bg-primary)', color:'#fff', alignItems:'center', justifyContent:'center', padding:'2rem', position:'relative', overflow:'hidden' }}>
+    <div style={{ display:'flex', minHeight:'100vh', background:'#f8fafc', color:'#0f172a', alignItems:'center', justifyContent:'center', padding:'2rem', position:'relative', overflow:'hidden' }}>
 
       {/* Animated background blobs */}
       <div style={{ position:'absolute', top:'-20%', left:'-10%', width:'500px', height:'500px', background:'radial-gradient(circle, rgba(225,29,72,0.08) 0%, transparent 70%)', pointerEvents:'none', animation:'blobDrift 8s ease-in-out infinite alternate' }}/>
@@ -65,25 +65,25 @@ export default function Home() {
               const Icon  = role.icon;
               const sel   = selectedRole === role.id;
               return (
-                <button
+                 <button
                   key={role.id}
                   onClick={() => setSelectedRole(role.id)}
                   style={{
                     padding:'1.1rem', display:'flex', flexDirection:'column', alignItems:'flex-start', gap:'0.75rem',
-                    background: sel ? 'rgba(225,29,72,0.10)' : '#1e293b',
-                    border: sel ? '2px solid #e11d48' : '2px solid #334155',
+                    background: sel ? 'var(--accent-light)' : '#ffffff',
+                    border: sel ? '2px solid #e11d48' : '2px solid #e2e8f0',
                     borderRadius:'12px', textAlign:'left', cursor:'pointer',
                     transition:'all 0.22s cubic-bezier(0.4,0,0.2,1)',
-                    boxShadow: sel ? '0 0 24px rgba(225,29,72,0.18), inset 0 1px 0 rgba(255,255,255,0.05)' : 'none',
+                    boxShadow: sel ? '0 0 24px rgba(225,29,72,0.18)' : '0 1px 3px rgba(0,0,0,0.05)',
                     transform: sel ? 'scale(1.01)' : 'scale(1)',
                     animation: `cardEntry 0.4s ${i*0.06}s cubic-bezier(0.4,0,0.2,1) both`,
                   }}
                 >
-                  <div style={{ width:'38px', height:'38px', borderRadius:'10px', background: sel ? 'rgba(225,29,72,0.15)' : '#0f172a', border:`1px solid ${sel?'#e11d48':'#334155'}`, display:'flex', alignItems:'center', justifyContent:'center', color: sel ? '#e11d48' : '#64748b', transition:'all 0.2s' }}>
+                  <div style={{ width:'38px', height:'38px', borderRadius:'10px', background: sel ? 'rgba(225,29,72,0.10)' : '#f1f5f9', border:`1px solid ${sel?'#e11d48':'#e2e8f0'}`, display:'flex', alignItems:'center', justifyContent:'center', color: sel ? '#e11d48' : '#475569', transition:'all 0.2s' }}>
                     <Icon size={20}/>
                   </div>
                   <div>
-                    <div style={{ fontWeight:700, fontSize:'0.95rem', color:'white', marginBottom:'0.2rem' }}>
+                    <div style={{ fontWeight:700, fontSize:'0.95rem', color: sel ? '#e11d48' : '#0f172a', marginBottom:'0.2rem' }}>
                       {t(role.label)}
                     </div>
                     <div style={{ fontSize:'0.72rem', color: sel ? '#94a3b8' : '#475569', lineHeight:1.4 }}>
@@ -96,7 +96,7 @@ export default function Home() {
           </div>
 
           {/* Status strip */}
-          <div style={{ display:'flex', gap:'1.5rem', padding:'0.75rem 1rem', background:'#1e293b', borderRadius:'8px', border:'1px solid #334155', marginTop:'auto' }}>
+          <div style={{ display:'flex', gap:'1.5rem', padding:'0.75rem 1rem', background:'#ffffff', borderRadius:'8px', border:'1px solid #e2e8f0', marginTop:'auto', boxShadow:'0 1px 2px rgba(0,0,0,0.02)' }}>
             {['Logistics Engine','Escrow Layer','Fleet OS'].map(s => (
               <div key={s} style={{ display:'flex', alignItems:'center', gap:'0.5rem' }}>
                 <span className="live-dot"/>
@@ -107,15 +107,15 @@ export default function Home() {
         </div>
 
         {/* ── Right: Auth card ── */}
-        <div style={{ flex:1, background:'var(--bg-secondary)', border:'1px solid var(--border-color)', borderRadius:'16px', padding:'2rem', display:'flex', flexDirection:'column', gap:'1.25rem', boxShadow:'0 24px 48px rgba(0,0,0,0.5)', animation:'cardEntry 0.4s 0.15s both' }}>
+        <div style={{ flex:1, background:'#ffffff', borderRadius:'16px', padding:'2rem', display:'flex', flexDirection:'column', gap:'1.25rem', boxShadow:'0 24px 48px rgba(0,0,0,0.3)', animation:'cardEntry 0.4s 0.15s both' }}>
           <div>
             <div style={{ fontSize:'0.7rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:'#94a3b8', marginBottom:'0.4rem' }}>Login Credentials</div>
-            <h2 style={{ fontSize:'1.35rem', fontWeight:800, color:'var(--text-primary)', letterSpacing:'-0.02em' }}>
+            <h2 style={{ fontSize:'1.35rem', fontWeight:800, color:'#0f172a', letterSpacing:'-0.02em' }}>
               {lang==='hin'?'लॉगिन विवरण':lang==='tel'?'లాగిన్ ఆధారాలు':lang==='kan'?'ಲಾಗಿನ್ ವಿವರಗಳು':'Sign in to UDANT'}
             </h2>
           </div>
 
-          <div style={{ height:'1px', background:'var(--border-color)' }}/>
+          <div style={{ height:'1px', background:'#f1f5f9' }}/>
 
           <div style={{ display:'flex', flexDirection:'column', gap:'0.875rem' }}>
             <div>
@@ -140,10 +140,10 @@ export default function Home() {
           </button>
 
           <div style={{ display:'flex', alignItems:'center', gap:'0.75rem', color:'#cbd5e1', fontSize:'0.8rem' }}>
-            <div style={{ flex:1, height:'1px', background:'var(--border-color)' }}/> {lang==='hin'?'या':lang==='tel'?'లేదా':lang==='kan'?'ಅಥವಾ':'or'} <div style={{ flex:1, height:'1px', background:'var(--border-color)' }}/>
+            <div style={{ flex:1, height:'1px', background:'#f1f5f9' }}/> {lang==='hin'?'या':lang==='tel'?'లేదా':lang==='kan'?'ಅಥವಾ':'or'} <div style={{ flex:1, height:'1px', background:'#f1f5f9' }}/>
           </div>
 
-          <button className="btn btn-outline" style={{ width:'100%', height:'2.75rem', borderRadius:'8px', color:'var(--text-primary)', fontSize:'0.875rem' }} onClick={handleLogin}>
+          <button className="btn btn-outline" style={{ width:'100%', height:'2.75rem', borderRadius:'8px', color:'#475569', fontSize:'0.875rem' }} onClick={handleLogin}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
             {lang==='hin'?'Google से साइन इन':lang==='tel'?'Google తో సైన్ ఇన్':lang==='kan'?'Google ನೊಂದಿಗೆ ಸೈನ್ ಇನ್':'Sign in with Google'}
           </button>

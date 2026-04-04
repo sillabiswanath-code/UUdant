@@ -332,7 +332,7 @@ export default function ProducerDashboard() {
       {/* ── IVR Modal ── */}
       {showIVR && (
         <div className="modal-overlay">
-          <div className="modal-box" style={{textAlign:'center'}}>
+          <div className="modal-box" style={{textAlign:'center', maxWidth: '450px'}}>
             <div style={{background:isListening?'#e11d48':'#f1f5f9', width:'64px', height:'64px', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', color:isListening?'white':'#94a3b8', margin:'0 auto 1.5rem auto', transition:'all 0.3s', boxShadow:isListening?'0 0 0 16px rgba(225,29,72,0.12)':'none'}}>
               <Mic size={32}/>
             </div>

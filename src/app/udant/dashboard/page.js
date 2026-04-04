@@ -58,7 +58,7 @@ export default function UdantDashboard() {
   return (
     <div className="dashboard-layout">
       {/* Sidebar */}
-      <div className="sidebar" style={{ backgroundColor: '#1e293b' }}>
+      <div className="sidebar">
         <div className="sidebar-header" style={{ color: 'var(--accent-color)' }}>
           UDANT ADMIN
         </div>

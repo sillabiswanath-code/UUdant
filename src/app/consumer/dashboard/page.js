@@ -73,7 +73,7 @@ export default function ConsumerDashboard() {
   return (
     <div className="dashboard-layout">
       {/* Sidebar */}
-      <div className="sidebar" style={{ backgroundColor: '#1e293b' }}>
+      <div className="sidebar">
         <div className="sidebar-header" style={{ color: 'var(--accent-color)', fontSize: '1.25rem' }}>
           PROCUREMENT MGR
         </div>
@@ -261,9 +261,9 @@ export default function ConsumerDashboard() {
       {showEscrowModal && selectedCrop && (
         <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
           <div className="card animate-fade-in" style={{ width: '450px', padding: 0, overflow: 'hidden' }}>
-            <div style={{ background: '#09090b', padding: '1.5rem', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ background: 'var(--accent-color)', padding: '1.5rem', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
-                <div style={{ fontSize: '0.875rem', color: '#a1a1aa' }}>Udant Secured Checkout</div>
+                <div style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.8)' }}>Udant Secured Checkout</div>
                 <div style={{ fontSize: '1.5rem', fontWeight: 600 }}>₹{(selectedCrop.price_band * selectedCrop.quantity_tonnes).toLocaleString('en-IN')}</div>
               </div>
               <button style={{ color: 'white' }} onClick={() => escrowStatus === 'idle' && setShowEscrowModal(false)}><X/></button>

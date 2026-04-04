@@ -14,6 +14,12 @@ export default function DPWorldDashboard() {
   const [localTrucks, setLocalTrucks] = useState([]);
   const [activeTab, setActiveTab] = useState('map');
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [toast, setToast] = useState(null);
+
+  const showToast = (message, type = 'success') => {
+      setToast({ message, type });
+      setTimeout(() => setToast(null), 3500);
+  };
 
   useEffect(() => {
     const userRole = document.cookie.includes('udant_role=dpworld_admin');
@@ -64,9 +70,9 @@ export default function DPWorldDashboard() {
       const badTruck = localTrucks.find(t => t.efficiency_score < 75);
       if (badTruck) {
           triggerReroute(badTruck.id);
-          alert(`Successfully rerouted ${badTruck.id} due to traffic anomaly. New ETA calculated.`);
+          showToast(`Successfully rerouted ${badTruck.id} due to traffic anomaly. New ETA calculated.`);
       } else {
-          alert("All trucks currently on optimal routes.");
+          showToast("All trucks currently on optimal routes.", "info");
       }
   };
 
@@ -74,15 +80,15 @@ export default function DPWorldDashboard() {
       const idleTruck = localTrucks.find(t => t.status === 'idle');
       if (idleTruck) {
           assignLoad(idleTruck.id);
-          alert(`Consolidation opportunity seized! ${idleTruck.id} assigned to pick up nearby LTL load.`);
+          showToast(`Consolidation opportunity seized! ${idleTruck.id} assigned to pick up nearby LTL load.`);
       } else {
-          alert("No idle trucks available in the vicinity.");
+          showToast("No idle trucks available in the vicinity.", "info");
       }
   };
 
   const handleDeliver = (truckId, contractId) => {
       markDelivered(truckId, contractId);
-      alert('Proof of Delivery received via GPS bounding box. Escrow contract flagged for release!');
+      showToast('Proof of Delivery received via GPS bounding box. Escrow contract flagged for release!');
       setActiveTruck(null);
   };
 
@@ -95,8 +101,8 @@ export default function DPWorldDashboard() {
   return (
     <div className="dashboard-layout">
       {/* Sidebar */}
-      <div className="sidebar" style={{ backgroundColor: '#09090b', color: '#94a3b8' }}>
-        <div className="sidebar-header" style={{ color: 'white', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1.25rem' }}>
+      <div className="sidebar">
+        <div className="sidebar-header" style={{ color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1.25rem' }}>
           <Zap size={24} style={{ color: '#e11d48' }}/> 
           CONTROL TOWER
         </div>
@@ -106,6 +112,14 @@ export default function DPWorldDashboard() {
           <div className={`nav-item ${activeTab === 'config' ? 'active' : ''}`} onClick={() => setActiveTab('config')} style={{ cursor: 'pointer' }}><Settings size={20}/> System Config</div>
         </div>
       </div>
+
+      {/* Toast Notification Overlay */}
+      {toast && (
+        <div style={{ position: 'fixed', top: '2rem', left: '50%', transform: 'translateX(-50%)', background: toast.type === 'success' ? '#10b981' : '#3b82f6', color: 'white', padding: '1rem 2rem', borderRadius: '8px', zIndex: 9999, boxShadow: '0 10px 25px rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', gap: '0.75rem', animation: 'slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}>
+          <CheckCircle size={20} />
+          <span style={{ fontWeight: 600 }}>{toast.message}</span>
+        </div>
+      )}
 
       {/* Main Content */}
       <div className="main-content" style={{ position: isFullscreen ? 'fixed' : 'relative', inset: isFullscreen ? 0 : 'auto', zIndex: isFullscreen ? 50 : 1, backgroundColor: 'var(--bg-primary)' }}>
@@ -336,7 +350,7 @@ export default function DPWorldDashboard() {
                           <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>If a truck drops below this efficiency rating, forcefully redirect it to merge loads.</p>
                           <input className="input-field" type="number" defaultValue={75} />
                       </div>
-                      <button className="btn btn-primary" style={{ marginTop: '1rem' }} onClick={()=>alert("Superuser configs saved!")}>Update Sub-System Overrides</button>
+                      <button className="btn btn-primary" style={{ marginTop: '1rem' }} onClick={()=>showToast("Superuser Sub-System Overrides correctly saved and propagated!")}>Update Sub-System Overrides</button>
                   </div>
               </div>
           )}
