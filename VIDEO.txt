@@ -1,15 +1,18 @@
-# Udant Logistics OS — Spam Bytes
-### DP World National Hackathon 2025 · BITS Hyderabad · April 3–4
+========================================
+  UDANT LOGISTICS OS — SPAM BYTES
+  DP World National Hackathon 2025
+  BITS Hyderabad · April 3–4, 2025
+========================================
 
----
+  LIVE DEPLOYMENT
+  ──────────────
+  https://spam-bytes-delta.vercel.app/
 
-##  Live Deployment
-**[spam-bytes-delta.vercel.app](https://spam-bytes-delta.vercel.app/)**
+  DEMO VIDEO
+  ──────────
+  https://drive.google.com/drive/folders/1P4uJli7pA8GSmYBXvxvrZrgKdq3Ffcu6
 
-##  Demo Video
-**[Watch on Google Drive](https://drive.google.com/drive/folders/1P4uJli7pA8GSmYBXvxvrZrgKdq3Ffcu6)**
-
----
-
-> *"Not a marketplace. An operating system."*
-> Farm gate → DP World → Global export.
+========================================
+  "Not a marketplace. An operating system."
+  Farm gate → DP World → Global export.
+========================================
