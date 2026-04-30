@@ -41,6 +41,7 @@ Instead of moving goods blindly, our **Logistics Engine** mathematically calcula
 - **Live Telemetry & Routing Intel**: Real-time Leaflet/CartoDB tracking of multi-modal truck transits processing simulated live traffic data streams. 
 - **Autonomous Rerouting**: If a truck dips below 75% efficiency parameters due to unforeseen rural traffic, the engine calculates backhaul route adjustments dynamically.
 </details>
+.
 
 ## Key Features That Set Udant Apart
 - 🎙️ **Polyglot Autonomous Voice Engine**: NLP-driven algorithms convert raw acoustic strings into structured logistical data (Crop, Tonnage, and expected Price bands).
